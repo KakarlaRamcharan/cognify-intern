@@ -1,0 +1,21 @@
+import random
+
+number_to_guess = random.randint(1, 10)
+attempts = 3
+
+while attempts > 0:
+    try:
+        guess = int(input("Guess a number between 1 and 10: "))
+        if guess == number_to_guess:
+            print("Congratulations! You guessed the correct number.")
+            break
+        elif guess < number_to_guess:
+            print("Too low.")
+        else:
+            print("Too high.")
+        attempts -= 1
+        if attempts == 0:
+            print(f"Out of attempts! The correct number was {number_to_guess}.")
+    except ValueError:
+        print("Please enter a valid integer.")
+        
