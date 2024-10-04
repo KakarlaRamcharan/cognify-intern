@@ -1,0 +1,110 @@
+import os
+
+class Task:
+    def __init__(self, title, description):
+        self.title = title
+        self.description = description
+
+    def __str__(self):
+        return f'Task: {self.title}, Description: {self.description}'
+
+class TaskManager:
+    def __init__(self, filename='tasks.txt'):
+        self.tasks = []
+        self.filename = filename
+        self.load_tasks()
+
+    def load_tasks(self):
+        """Load tasks from the text file."""
+        try:
+            if os.path.exists(self.filename):
+                with open(self.filename, 'r') as file:
+                    for line in file:
+                        title, description = line.strip().split('|')
+                        task = Task(title, description)
+                        self.tasks.append(task)
+        except Exception as e:
+            print(f"Error loading tasks: {e}")
+
+    def save_tasks(self):
+        """Save tasks to the text file."""
+        try:
+            with open(self.filename, 'w') as file:
+                for task in self.tasks:
+                    file.write(f"{task.title}|{task.description}\n")
+        except Exception as e:
+            print(f"Error saving tasks: {e}")
+
+    def create_task(self, title, description):
+        task = Task(title, description)
+        self.tasks.append(task)
+        self.save_tasks()
+        print("Task added successfully.")
+
+    def read_tasks(self):
+        if not self.tasks:
+            print("No tasks available.")
+        else:
+            for i, task in enumerate(self.tasks):
+                print(f"{i + 1}. {task}")
+
+    def update_task(self, index, title, description):
+        if 0 <= index < len(self.tasks):
+            self.tasks[index].title = title
+            self.tasks[index].description = description
+            self.save_tasks()
+            print("Task updated successfully.")
+        else:
+            print("Invalid task index.")
+
+    def delete_task(self, index):
+        if 0 <= index < len(self.tasks):
+            del self.tasks[index]
+            self.save_tasks()
+            print("Task deleted successfully.")
+        else:
+            print("Invalid task index.")
+
+def main():
+    task_manager = TaskManager()
+
+    while True:
+        print("\nOptions:")
+        print("1. Create Task")
+        print("2. Read Tasks")
+        print("3. Update Task")
+        print("4. Delete Task")
+        print("5. Exit")
+
+        choice = input("Choose an option (1-5): ")
+
+        if choice == '1':
+            title = input("Enter task title: ")
+            description = input("Enter task description: ")
+            task_manager.create_task(title, description)
+
+        elif choice == '2':
+            task_manager.read_tasks()
+
+        elif choice == '3':
+            task_manager.read_tasks()
+            index = int(input("Enter task number to update: ")) - 1
+            title = input("Enter new task title: ")
+            description = input("Enter new task description: ")
+            task_manager.update_task(index, title, description)
+
+        elif choice == '4':
+            task_manager.read_tasks()
+            index = int(input("Enter task number to delete: ")) - 1
+            task_manager.delete_task(index)
+
+        elif choice == '5':
+            print("Exiting the application.")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
+1
